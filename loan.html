@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>住宅ローンシミュレーター</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white shadow-lg rounded-2xl p-8 w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-6 text-center">🏠 住宅ローン計算機</h1>
+    
+    <label class="block mb-2">借入金額（万円）</label>
+    <input id="amount" type="number" class="w-full p-2 border rounded mb-4" placeholder="例：3000" />
+
+    <label class="block mb-2">金利（年利％）</label>
+    <input id="rate" type="number" step="0.01" class="w-full p-2 border rounded mb-4" placeholder="例：1.5" />
+
+    <label class="block mb-2">返済年数</label>
+    <input id="years" type="number" class="w-full p-2 border rounded mb-4" placeholder="例：35" />
+
+    <button onclick="calculateLoan()" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+      計算する
+    </button>
+
+    <div id="result" class="mt-6 text-center text-lg font-semibold text-gray-800 hidden">
+      <p>💰 月々の返済額：<span id="monthly"></span> 円</p>
+      <p>💵 総返済額：<span id="total"></span> 円</p>
+    </div>
+  </div>
+
+  <script>
+    function calculateLoan() {
+      const amount = Number(document.getElementById('amount').value) * 10000;
+      const rate = Number(document.getElementById('rate').value) / 100 / 12;
+      const years = Number(document.getElementById('years').value);
+      const months = years * 12;
+
+      if (!amount || !rate || !years) {
+        alert('すべての項目を入力してください');
+        return;
+      }
+
+      const monthly =
+        (amount * rate) / (1 - Math.pow(1 + rate, -months));
+      const total = monthly * months;
+
+      document.getElementById('monthly').innerText = Math.round(monthly).toLocaleString();
+      document.getElementById('total').innerText = Math.round(total).toLocaleString();
+      document.getElementById('result').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
